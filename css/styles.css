@@ -2716,3 +2716,87 @@ input[type="range"]::-moz-range-thumb:hover {
     color: var(--color-text-main);
     line-height: 1.5;
 }
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    text-align: center;
+    background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(44, 82, 130, 0.4)), url('https://raw.githubusercontent.com/zowper/co-own/main/assets/typical_750k_house.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    /* Full width override since parent main-content has padding */
+    margin-left: calc(-1 * var(--space-xl));
+    margin-right: calc(-1 * var(--space-xl));
+    padding: var(--space-xl) var(--space-md);
+    color: #ffffff;
+}
+
+.hero-content {
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 var(--space-md);
+    z-index: 2;
+}
+
+.hero-title {
+    font-family: 'Lora', serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: #ffffff !important;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--space-sm);
+    max-width: 800px;
+}
+
+.hero-subtitle {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 650px;
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+
+.hero-cta-btn {
+    display: inline-block;
+    background-color: #D97757; /* Terracotta */
+    color: #ffffff !important;
+    padding: 0.9rem 2.2rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+    box-shadow: 0 4px 14px rgba(217, 119, 87, 0.35);
+}
+
+.hero-cta-btn:hover {
+    background-color: #C25E3E; /* Terracotta Hover */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(217, 119, 87, 0.45);
+}
+
+.hero-cta-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Responsive Overrides for Hero Section */
+@media (max-width: 1024px) {
+    .hero-section {
+        margin-left: calc(-1 * var(--space-md));
+        margin-right: calc(-1 * var(--space-md));
+        min-height: 75vh;
+    }
+}
+
