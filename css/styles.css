@@ -2260,6 +2260,19 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 /* Contract Viewer Section */
+.contract-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.contract-actions .btn {
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+}
+
 .contract-viewer-wrapper {
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
