@@ -1,13 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Navigation Menu, Overlay, & Sliding Indicator Setup
+    // 1. Navigation Menu & Sliding Indicator Setup
     const hamburger = document.getElementById('hamburger');
-    const sidebarContainer = document.getElementById('sidebar-container');
+    const navContainer = document.getElementById('nav-container');
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
-    const navOverlay = document.getElementById('nav-overlay');
-    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
 
-    // Create and append sliding indicator background
+    // Create and append sliding indicator background (only on desktop layout)
     const indicator = document.createElement('div');
     indicator.className = 'nav-indicator';
     if (navMenu) {
@@ -20,7 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update indicator size and position
     function updateNavIndicator() {
         const activeLink = navMenu ? navMenu.querySelector('.nav-link.active') : null;
-        if (activeLink && indicator) {
+        // Check if desktop nav is active (nav-indicator is visible)
+        const isDesktop = window.innerWidth > 1024;
+        
+        if (activeLink && indicator && isDesktop) {
             const linkRect = activeLink.getBoundingClientRect();
             const menuRect = navMenu.getBoundingClientRect();
             
@@ -37,73 +38,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (hamburger && sidebarContainer) {
+    // Toggle Mobile Navigation
+    if (hamburger && navContainer) {
         hamburger.addEventListener('click', () => {
-            const isActive = sidebarContainer.classList.toggle('active');
+            const isActive = navContainer.classList.toggle('active');
             hamburger.classList.toggle('active', isActive);
-            if (navOverlay) navOverlay.classList.toggle('active', isActive);
-            document.body.classList.toggle('sidebar-active', isActive);
+            hamburger.setAttribute('aria-expanded', isActive);
+            document.body.classList.toggle('nav-active', isActive);
         });
     }
 
-    if (closeSidebarBtn) {
-        closeSidebarBtn.addEventListener('click', () => {
-            if (hamburger) hamburger.classList.remove('active');
-            if (sidebarContainer) sidebarContainer.classList.remove('active');
-            if (navOverlay) navOverlay.classList.remove('active');
-            document.body.classList.remove('sidebar-active');
-        });
-    }
-
-    if (navOverlay) {
-        navOverlay.addEventListener('click', () => {
-            if (hamburger) hamburger.classList.remove('active');
-            if (sidebarContainer) sidebarContainer.classList.remove('active');
-            navOverlay.classList.remove('active');
-            document.body.classList.remove('sidebar-active');
-        });
-    }
-
+    // Navigation Link Click Handlers
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            if (hamburger) hamburger.classList.remove('active');
-            if (sidebarContainer) sidebarContainer.classList.remove('active');
-            if (navOverlay) navOverlay.classList.remove('active');
-            document.body.classList.remove('sidebar-active');
-            
-            // Determine if the clicked link is a sub-link or main-link
-            const isSub = link.classList.contains('sub-link');
-            const parentGroup = link.closest('.nav-item-group');
-            const mainLink = isSub ? parentGroup.querySelector('.main-link') : link;
-            
-            // Remove active classes
-            document.querySelectorAll('.main-link').forEach(l => l.classList.remove('active'));
-            document.querySelectorAll('.sub-link').forEach(l => l.classList.remove('active-sub'));
-            
-            // Set active class on main link
-            if (mainLink) mainLink.classList.add('active');
-            
-            // Set active-sub class on the specific sub-link
-            if (isSub) {
-                link.classList.add('active-sub');
-            } else if (parentGroup) {
-                // If main link is clicked, default to its first sub-link
-                const firstSub = parentGroup.querySelector('.sub-link');
-                if (firstSub) {
-                    firstSub.classList.add('active-sub');
-                }
+            // Close mobile menu if open
+            if (hamburger) {
+                hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
             }
-            
-            // Handle expanding parent group and collapsing others
-            if (parentGroup) {
-                document.querySelectorAll('.nav-item-group').forEach(group => {
-                    if (group === parentGroup) {
-                        group.classList.add('expanded');
-                    } else {
-                        group.classList.remove('expanded');
-                    }
-                });
+            if (navContainer) {
+                navContainer.classList.remove('active');
             }
+            document.body.classList.remove('nav-active');
+            
+            // Set active class on clicked link
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
             
             // Instantly update the indicator position
             updateNavIndicator();
@@ -117,10 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Map only the sub-links to their corresponding section elements for Scroll Spy
+    // Map the main links to their corresponding section elements for Scroll Spy
     const sectionsToWatch = [];
-    const subLinks = document.querySelectorAll('.sub-link');
-    subLinks.forEach(link => {
+    navLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (href && href.startsWith('#') && href.length > 1) {
             const section = document.querySelector(href);
@@ -154,35 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Default to the first section (Strategy/Combining Power) if none matched yet
+        // Default to the first section if none matched yet
         if (!currentActive && sectionsToWatch.length > 0) {
             currentActive = sectionsToWatch[0];
         }
 
         if (currentActive) {
             let changed = false;
-            const activeSubLink = currentActive.link;
-            const parentGroup = activeSubLink.closest('.nav-item-group');
-            const parentMainLink = parentGroup ? parentGroup.querySelector('.main-link') : null;
+            const activeLink = currentActive.link;
 
-            // Update sub-links active-sub state
-            subLinks.forEach(link => {
-                if (link === activeSubLink) {
-                    if (!link.classList.contains('active-sub')) {
-                        link.classList.add('active-sub');
-                        changed = true;
-                    }
-                } else {
-                    if (link.classList.contains('active-sub')) {
-                        link.classList.remove('active-sub');
-                        changed = true;
-                    }
-                }
-            });
-
-            // Update main-links active state (for sliding indicator)
-            document.querySelectorAll('.main-link').forEach(link => {
-                if (link === parentMainLink) {
+            navLinks.forEach(link => {
+                if (link === activeLink) {
                     if (!link.classList.contains('active')) {
                         link.classList.add('active');
                         changed = true;
@@ -195,25 +136,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Expand active group, collapse others
-            if (parentGroup) {
-                document.querySelectorAll('.nav-item-group').forEach(group => {
-                    if (group === parentGroup) {
-                        if (!group.classList.contains('expanded')) {
-                            group.classList.add('expanded');
-                            changed = true;
-                        }
-                    } else {
-                        if (group.classList.contains('expanded')) {
-                            group.classList.remove('expanded');
-                            changed = true;
-                        }
-                    }
-                });
-            }
-
             if (changed) {
                 updateNavIndicator();
+            }
+        }
+    }
+
+    // Add scrolled class to top header on scroll
+    const topHeader = document.getElementById('top-header');
+    function handleHeaderScroll() {
+        if (topHeader) {
+            if (window.scrollY > 10) {
+                topHeader.classList.add('scrolled');
+            } else {
+                topHeader.classList.remove('scrolled');
             }
         }
     }
@@ -221,40 +157,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Scroll, Resize, and Transition listeners
     window.addEventListener('scroll', () => {
         window.requestAnimationFrame(spyScroll);
+        handleHeaderScroll();
     });
 
     window.addEventListener('resize', () => {
         window.requestAnimationFrame(updateNavIndicator);
     });
 
-    if (sidebarContainer) {
-        sidebarContainer.addEventListener('transitionend', () => {
+    if (navContainer) {
+        navContainer.addEventListener('transitionend', () => {
             updateNavIndicator();
         });
     }
 
-    // Track submenu height transitions to keep sliding indicator perfectly synced
-    document.querySelectorAll('.nav-submenu').forEach(submenu => {
-        submenu.addEventListener('transitionstart', () => {
-            let start = null;
-            function step(timestamp) {
-                if (!start) start = timestamp;
-                const progress = timestamp - start;
-                updateNavIndicator();
-                if (progress < 450) {
-                    window.requestAnimationFrame(step);
-                }
-            }
-            window.requestAnimationFrame(step);
-        });
-        submenu.addEventListener('transitionend', () => {
-            updateNavIndicator();
-        });
-    });
-
-    // Initialize indicator position on page load
+    // Initialize position on page load
     setTimeout(() => {
         spyScroll();
+        handleHeaderScroll();
         updateNavIndicator();
     }, 100);
 

@@ -10,13 +10,29 @@
 </head>
 <body>
 
-    <!-- Dimming Background Mask for Mobile Sidebar -->
-    <div class="nav-overlay" id="nav-overlay"></div>
+    <!-- Top Glassmorphic Navigation Header -->
+    <header class="top-header" id="top-header">
+        <div class="header-container">
+            <a href="#hero" class="logo">
+                <img src="https://raw.githubusercontent.com/zowper/co-own/main/assets/Springboard-Logo.png" alt="Springboard Logo" class="logo-img">
+            </a>
+            
+            <nav class="nav-container" id="nav-container">
+                <ul class="nav-menu" id="nav-menu">
+                    <li class="nav-item"><a href="#proposal" class="nav-link main-link">The Vision</a></li>
+                    <li class="nav-item"><a href="#adu" class="nav-link main-link">The Setup</a></li>
+                    <li class="nav-item"><a href="#calculator" class="nav-link main-link">The Numbers</a></li>
+                    <li class="nav-item"><a href="#properties" class="nav-link main-link">The Market</a></li>
+                    <li class="nav-item"><a href="#safeguards" class="nav-link main-link">The Protections</a></li>
+                    <li class="nav-item"><a href="#faq" class="nav-link main-link">FAQ</a></li>
+                    <li class="nav-item"><a href="#partnership" class="nav-link main-link">Partnership</a></li>
+                </ul>
+                <div class="mobile-nav-footer">
+                    Prepared by Jared, Melinda, & Nelson Carter
+                </div>
+            </nav>
 
-    <!-- Mobile Header (Visible < 1024px) -->
-    <header class="mobile-header">
-        <div class="mobile-navbar">
-            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -25,78 +41,6 @@
     </header>
 
     <div class="layout-wrapper">
-        <!-- Sidebar Container (Left Column on Desktop, Mobile Drawer < 1024px) -->
-        <aside class="sidebar-container" id="sidebar-container">
-            <div class="sidebar-top">
-                <div class="sidebar-header-wrapper">
-                    <button class="close-sidebar-btn" id="close-sidebar-btn" aria-label="Close navigation menu">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-                
-                <nav class="sidebar-nav">
-                    <ul class="nav-menu" id="nav-menu">
-                        <li class="nav-item-group">
-                            <a href="#proposal" class="nav-link main-link">The Vision</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#proposal" class="nav-link sub-link">Introduction</a></li>
-                                <li><a href="#strategy" class="nav-link sub-link">Combining Power</a></li>
-                                <li><a href="#hoa" class="nav-link sub-link">HOA Analysis</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-group">
-                            <a href="#adu" class="nav-link main-link">The Setup</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#adu" class="nav-link sub-link">Dual Living</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-group">
-                            <a href="#calculator" class="nav-link main-link">The Numbers</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#calculator" class="nav-link sub-link">Rent Equalization</a></li>
-                                <li><a href="#timeline" class="nav-link sub-link">5-Year Exit Plan</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-group">
-                            <a href="#properties" class="nav-link main-link">The Market</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#properties" class="nav-link sub-link">Current Opportunities</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-group">
-                            <a href="#safeguards" class="nav-link main-link">The Protections</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#safeguards" class="nav-link sub-link">Trust & Safeguards</a></li>
-                                <li><a href="#contract-teaser" class="nav-link sub-link">Sample Agreement</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-group">
-                            <a href="#faq" class="nav-link main-link">FAQ</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#faq" class="nav-link sub-link">FAQ & Exit Scenarios</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item-group">
-                            <a href="#partnership" class="nav-link main-link">Partnership</a>
-                            <ul class="nav-submenu">
-                                <li><a href="#partnership" class="nav-link sub-link">Partnership Dynamics</a></li>
-                                <li><a href="#next-steps" class="nav-link sub-link">Next Steps</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            
-            <div class="sidebar-bottom">
-                <div class="sidebar-credit">
-                    Prepared by Jared, Melinda, & Nelson Carter
-                </div>
-            </div>
-        </aside>
-
         <!-- Main Content Area -->
         <main class="main-content">
 
