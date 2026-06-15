@@ -2147,9 +2147,23 @@ input[type="range"]::-moz-range-thumb:hover {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
     gap: var(--space-xl);
     margin-bottom: var(--space-lg);
+}
+
+@media (max-width: 991px) {
+    .footer-grid {
+        grid-template-columns: 1.2fr 1fr;
+        gap: var(--space-lg);
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
 }
 
 .footer-brand .logo {
