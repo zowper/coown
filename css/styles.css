@@ -2675,6 +2675,13 @@ input[type="range"]::-moz-range-thumb:hover {
     line-height: 1.6;
 }
 
+.hero-highlight {
+    color: #FF9E7D; /* Vibrant light terracotta accent for dark background */
+    font-weight: 800;
+    border-bottom: 2px solid rgba(255, 158, 125, 0.4);
+    padding-bottom: 1px;
+}
+
 .hero-cta-btn {
     display: inline-block;
     background-color: #D97757; /* Terracotta */
