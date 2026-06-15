@@ -539,7 +539,7 @@ p {
 }
 
 .signature-family-photo {
-    width: 150px;
+    width: 180px;
     max-width: 100%;
     height: auto;
     border-radius: 8px;
@@ -560,7 +560,7 @@ p {
     font-size: 2.2rem;
     font-weight: normal;
     color: #386144;
-    text-align: left;
+    text-align: right;
     line-height: 1.2;
 }
 
