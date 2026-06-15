@@ -1134,18 +1134,52 @@ document.addEventListener('DOMContentLoaded', () => {
             "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Smooth_aerial_drone_push_in_sh.mp4"
         ];
         
-        let currentVideoIndex = 0;
+        // Shuffle helper using Fisher-Yates algorithm
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+        
+        // Setup state variables
+        let playlist = shuffle(videoUrls);
+        let currentPlaylistIndex = 0;
         let activeVideo = video1;
         let idleVideo = video2;
         let transitionInProgress = false;
+        let isHeroVisible = true; // Default to true, updated by IntersectionObserver
+        
+        // Dynamic playlist builder to prevent consecutive repetitions and support infinite shuffling
+        function checkAndExtendPlaylist() {
+            if (playlist.length - currentPlaylistIndex < 4) {
+                let newBatch = shuffle(videoUrls);
+                const lastItem = playlist[playlist.length - 1];
+                if (newBatch[0] === lastItem) {
+                    // Swap first and second elements in newBatch to prevent consecutive repeat
+                    const temp = newBatch[0];
+                    newBatch[0] = newBatch[1];
+                    newBatch[1] = temp;
+                }
+                playlist = playlist.concat(newBatch);
+                
+                // Keep the playlist queue bounded to save memory
+                if (currentPlaylistIndex > 20) {
+                    playlist = playlist.slice(currentPlaylistIndex - 2);
+                    currentPlaylistIndex = 2;
+                }
+            }
+        }
         
         if (video1 && video2) {
-            // Set initial sources
-            video1.src = videoUrls[0];
+            // Set initial sources from the first shuffled batch
+            video1.src = playlist[0];
             video1.style.opacity = '1';
             video1.classList.add('active');
             
-            video2.src = videoUrls[1];
+            video2.src = playlist[1];
             video2.style.opacity = '0';
             video2.classList.remove('active');
             
@@ -1156,14 +1190,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             function setupVideoListeners(videoEl) {
                 videoEl.addEventListener('timeupdate', () => {
-                    // Start fade 1.5 seconds before the video ends
-                    if (videoEl === activeVideo && !transitionInProgress && videoEl.duration && videoEl.currentTime >= videoEl.duration - 1.5) {
+                    // Start fade 1.5 seconds before the active video ends
+                    if (videoEl === activeVideo && !transitionInProgress && isHeroVisible && !document.hidden && videoEl.duration && videoEl.currentTime >= videoEl.duration - 1.5) {
                         transitionToNextVideo();
                     }
                 });
                 
                 videoEl.addEventListener('ended', () => {
-                    if (videoEl === activeVideo && !transitionInProgress) {
+                    if (videoEl === activeVideo && !transitionInProgress && isHeroVisible && !document.hidden) {
                         transitionToNextVideo();
                     }
                 });
@@ -1175,8 +1209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             function transitionToNextVideo() {
                 transitionInProgress = true;
                 
-                const nextIndex = (currentVideoIndex + 1) % videoUrls.length;
-                const indexAfterNext = (nextIndex + 1) % videoUrls.length;
+                const nextIndex = currentPlaylistIndex + 1;
                 
                 const oldActive = activeVideo;
                 const newActive = idleVideo;
@@ -1191,12 +1224,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     setTimeout(() => {
                         oldActive.pause();
-                        oldActive.src = videoUrls[indexAfterNext];
-                        oldActive.load();
                         
+                        // Update state and active/idle references
                         activeVideo = newActive;
                         idleVideo = oldActive;
-                        currentVideoIndex = nextIndex;
+                        currentPlaylistIndex = nextIndex;
+                        
+                        // Reshuffle and append more videos if needed, then perform queue cleanup
+                        checkAndExtendPlaylist();
+                        
+                        // Preload the next video in the playlist queue
+                        oldActive.src = playlist[currentPlaylistIndex + 1];
+                        oldActive.load();
+                        
                         transitionInProgress = false;
                     }, 1500); // Wait for CSS opacity transition to complete
                 }).catch(err => {
@@ -1204,6 +1244,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     transitionInProgress = false;
                 });
             }
+            
+            // Visibility Handling: Pause videos when hero section scrolls out of view or tab is hidden
+            if ('IntersectionObserver' in window) {
+                const observerOptions = {
+                    root: null, // viewport
+                    threshold: 0.15 // trigger when 15% of the hero section is visible
+                };
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        isHeroVisible = entry.isIntersecting;
+                        if (isHeroVisible) {
+                            if (!document.hidden) {
+                                activeVideo.play().catch(err => {
+                                    console.log("Failed to resume hero video on visibility intersection:", err);
+                                });
+                            }
+                        } else {
+                            activeVideo.pause();
+                            idleVideo.pause();
+                        }
+                    });
+                }, observerOptions);
+                
+                observer.observe(heroSection);
+            }
+            
+            // Pause videos when the user switches browser tabs or minimizes browser
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    activeVideo.pause();
+                    idleVideo.pause();
+                } else if (isHeroVisible) {
+                    activeVideo.play().catch(err => {
+                        console.log("Failed to play active video on visibility change:", err);
+                    });
+                }
+            });
         }
     }
 
