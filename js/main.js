@@ -611,8 +611,127 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Compare Your Path Calculator
+    const compDownPaymentInput = document.getElementById('comp-down-payment');
+    const compMonthlyBudgetInput = document.getElementById('comp-monthly-budget');
+    const compLivingPrefInput = document.getElementById('comp-living-pref');
+
+    const soloMaxPriceOutput = document.getElementById('solo-max-price');
+    const soloActualMonthlyOutput = document.getElementById('solo-actual-monthly');
+    const soloExtraFeesOutput = document.getElementById('solo-extra-fees');
+    const solo5yrEquityOutput = document.getElementById('solo-5yr-equity');
+
+    const coActualMonthlyOutput = document.getElementById('co-actual-monthly');
+    const coEqualizationEffectOutput = document.getElementById('co-equalization-effect');
+    const co5yrEquityOutput = document.getElementById('co-5yr-equity');
+    const netWealthAdvOutput = document.getElementById('net-wealth-adv');
+
+    function calculatePathComparison() {
+        if (!compDownPaymentInput || !compMonthlyBudgetInput || !compLivingPrefInput) return;
+
+        const downPayment = parseFloat(compDownPaymentInput.value) || 0;
+        const monthlyBudget = parseFloat(compMonthlyBudgetInput.value) || 0;
+        const livingPref = compLivingPrefInput.value;
+
+        // 1. Calculate Solo Price & Details
+        let soloPrice = downPayment / 0.20;
+        for (let i = 0; i < 50; i++) {
+            const loan = Math.max(0, soloPrice - downPayment);
+            const pAndI = loan * 0.00615717;
+            const pmi = (downPayment / soloPrice < 0.20) ? (loan * 0.0075 / 12) : 0;
+            const taxIns = (soloPrice * 0.006) / 12;
+            const hoa = 150;
+            const total = pAndI + pmi + taxIns + hoa;
+            soloPrice += (monthlyBudget - total) * 120;
+            if (soloPrice < downPayment) {
+                soloPrice = downPayment + 1000;
+            }
+        }
+        soloPrice = Math.round(soloPrice);
+        const soloLoan = Math.max(0, soloPrice - downPayment);
+        const soloPAndI = soloLoan * 0.00615717;
+        const soloPmi = (downPayment / soloPrice < 0.20) ? (soloLoan * 0.0075 / 12) : 0;
+        const soloTaxIns = (soloPrice * 0.006) / 12;
+        const soloHoa = 150;
+        const soloTotalMonthly = soloPAndI + soloPmi + soloTaxIns + soloHoa;
+
+        const soloVal5 = soloPrice * Math.pow(1.035, 5);
+        let soloLoan5 = 0;
+        if (soloLoan > 0) {
+            const r_m = (6.25 / 100) / 12;
+            soloLoan5 = soloLoan * (Math.pow(1 + r_m, 360) - Math.pow(1 + r_m, 60)) / (Math.pow(1 + r_m, 360) - 1);
+        }
+        const soloEquity5 = soloVal5 - soloLoan5;
+
+        if (soloMaxPriceOutput) soloMaxPriceOutput.textContent = '$' + Math.round(soloPrice).toLocaleString();
+        if (soloActualMonthlyOutput) soloActualMonthlyOutput.textContent = '$' + Math.round(soloTotalMonthly).toLocaleString();
+        if (soloExtraFeesOutput) soloExtraFeesOutput.textContent = '$' + Math.round(soloPmi + soloHoa).toLocaleString() + ' / mo';
+        if (solo5yrEquityOutput) solo5yrEquityOutput.textContent = '$' + Math.round(soloEquity5).toLocaleString();
+
+        // 2. Calculate Co-ownership Details
+        const coPrice = 750000;
+        const coDown = 150000;
+        const coLoan = coPrice - coDown;
+        const coInterest = 6.25;
+        const coPAndI = coLoan * 0.00615717;
+        const coTaxIns = 800;
+        const coTotalMonthly = coPAndI + coTaxIns;
+
+        const baseShare = coTotalMonthly * 0.50;
+
+        const appMain = 2200;
+        const appDown = 1400;
+        const entitled = (appMain + appDown) * 0.50;
+        const eqPayment = entitled - appDown;
+
+        let coMonthly = baseShare;
+        let eqEffectText = "";
+        if (livingPref === 'downstairs') {
+            coMonthly = baseShare - eqPayment;
+            eqEffectText = `-$${Math.round(eqPayment).toLocaleString()} / mo (ADU Credit)`;
+        } else {
+            coMonthly = baseShare + eqPayment;
+            eqEffectText = `+$${Math.round(eqPayment).toLocaleString()} / mo (Upstairs Premium)`;
+        }
+
+        const coVal5 = coPrice * Math.pow(1.05, 5);
+        let coLoan5 = 0;
+        if (coLoan > 0) {
+            const r_m = (coInterest / 100) / 12;
+            coLoan5 = coLoan * (Math.pow(1 + r_m, 360) - Math.pow(1 + r_m, 60)) / (Math.pow(1 + r_m, 360) - 1);
+        }
+        const coJointEquity5 = coVal5 - coLoan5;
+        const coEquityShare5 = coJointEquity5 * 0.50;
+
+        const myRequiredDown = 75000;
+        const gapLoan = Math.max(0, myRequiredDown - downPayment);
+        const gapLoanBalance5 = gapLoan * Math.pow(1.0625, 5);
+        const myNetCoEquity5 = coEquityShare5 - gapLoanBalance5;
+
+        if (coActualMonthlyOutput) coActualMonthlyOutput.textContent = '$' + Math.round(coMonthly).toLocaleString();
+        if (coEqualizationEffectOutput) coEqualizationEffectOutput.textContent = eqEffectText;
+        if (co5yrEquityOutput) {
+            if (gapLoan > 0) {
+                co5yrEquityOutput.innerHTML = `$` + Math.round(myNetCoEquity5).toLocaleString() + ` <span style="font-size: 0.85rem; color: var(--color-text-muted); font-weight: normal;">(after paying off $` + Math.round(gapLoanBalance5).toLocaleString() + ` Gap Loan)</span>`;
+            } else {
+                co5yrEquityOutput.textContent = '$' + Math.round(myNetCoEquity5).toLocaleString();
+            }
+        }
+
+        const advantage = myNetCoEquity5 - soloEquity5;
+        if (netWealthAdvOutput) netWealthAdvOutput.textContent = '$' + Math.round(advantage).toLocaleString();
+    }
+
+    [compDownPaymentInput, compMonthlyBudgetInput, compLivingPrefInput].forEach(input => {
+        if (input) {
+            input.addEventListener('input', calculatePathComparison);
+        }
+    });
+
     // Run first calculation on load
     calculateEqualization();
+    calculatePathComparison();
+
 
     // Check if there is a pending property to load into the calculator from another page
     const pendingMls = localStorage.getItem('coown_load_mls');

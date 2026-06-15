@@ -219,6 +219,78 @@
                                         </div>
                                     </div>
                                 </form>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-section: Compare Your Path -->
+                    <div class="sub-section" id="path-comparison">
+                        <h3 class="sub-section-title">Compare Your Path: Solo Buying vs. Co-Ownership</h3>
+                        <p>How does co-owning with the Carters stack up against buying a starter home or townhome on your own? Enter your available capital and monthly budget below to see how combined purchasing power accelerates your home size, location quality, and 5-year equity growth.</p>
+                        
+                        <div class="calc-grid" style="margin-top: var(--space-md); flex-direction: column; gap: var(--space-md);">
+                            <div class="comparison-input-panel" style="background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-lg); box-shadow: var(--shadow-sm); width: 100%;">
+                                <form class="calc-form" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));" onsubmit="return false;">
+                                    <div class="input-group">
+                                        <label for="comp-down-payment">Your Available Down Payment</label>
+                                        <div class="input-wrapper">
+                                            <span class="input-prefix">$</span>
+                                            <input type="number" id="comp-down-payment" value="35000" min="5000" step="5000">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="comp-monthly-budget">Your Comfortable Monthly Payment</label>
+                                        <div class="input-wrapper">
+                                            <span class="input-prefix">$</span>
+                                            <input type="number" id="comp-monthly-budget" value="1800" min="800" step="100">
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="comp-living-pref">Your Living Suite Preference</label>
+                                        <select id="comp-living-pref" style="padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: var(--font-body); font-size: 0.95rem; height: 38px; background-color: var(--color-surface); color: var(--color-text-main);">
+                                            <option value="downstairs">Live Downstairs (ADU Apartment)</option>
+                                            <option value="upstairs">Live Upstairs (Main Level)</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div class="comparison-results-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg); width: 100%;">
+                                <!-- Solo Column -->
+                                <div class="comparison-column-box" style="background-color: #FFFFFF; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-lg); box-shadow: var(--shadow-sm); display: flex; flex-direction: column;">
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--color-primary); border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-sm);">Solo Buying Route (Starter Home)</h4>
+                                    <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: var(--space-md); line-height: 1.5;">Buying an entry-level home or townhome alone, facing high competition and extra fees.</p>
+                                    <ul class="checklist-ul" style="flex-grow: 1; margin-bottom: var(--space-md);">
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Affordable Home Price:</strong> <span id="solo-max-price" style="font-weight: 700; color: var(--color-primary);">$273,000</span></li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Estimated Monthly Cost:</strong> <span id="solo-actual-monthly" style="font-weight: 700;">$1,800</span></li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>HOA & PMI Fees:</strong> <span id="solo-extra-fees" style="font-weight: 600; color: var(--color-accent);">$280 / mo</span> <span style="font-size: 0.8rem; color: var(--color-text-muted);">(non-equity cost)</span></li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Home Quality:</strong> Older build, smaller layout, high repair risk, noisy streets.</li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>5-Year Wealth Build (Equity):</strong> <span id="solo-5yr-equity" style="font-weight: 700; color: var(--color-primary);">$64,800</span></li>
+                                    </ul>
+                                    <div style="background-color: var(--color-surface-alt); padding: var(--space-sm); border-radius: var(--radius-sm); text-align: center; font-size: 0.9rem; font-weight: 600; color: var(--color-text-main);">
+                                        Solo Outcome: Slow wealth building
+                                    </div>
+                                </div>
+                                
+                                <!-- Co-Ownership Column -->
+                                <div class="comparison-column-box highlight-column-box" style="background-color: #FFFFFF; border: 2px solid var(--color-secondary); border-radius: var(--radius-md); padding: var(--space-lg); box-shadow: var(--shadow-md); display: flex; flex-direction: column; position: relative; overflow: visible;">
+                                    <span class="column-badge" style="position: absolute; top: -12px; right: 15px; background-color: var(--color-secondary); color: #FFFFFF; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 10px; border-radius: 20px; z-index: 10;">Highly Recommended</span>
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--color-secondary); border-bottom: 2px solid rgba(74, 124, 89, 0.2); padding-bottom: var(--space-xs); margin-bottom: var(--space-sm);">Co-Ownership Route (Premium ADU)</h4>
+                                    <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: var(--space-md); line-height: 1.5;">Pooling budgets to buy a premium single-family home with complete privacy and zero PMI.</p>
+                                    <ul class="checklist-ul" style="flex-grow: 1; margin-bottom: var(--space-md);">
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Premium Home Value:</strong> <span style="font-weight: 700; color: var(--color-secondary);">$750,000</span> <span style="font-size: 0.8rem; color: var(--color-text-muted);">(50% ownership)</span></li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Net Monthly Cost:</strong> <span id="co-actual-monthly" style="font-weight: 700; color: var(--color-secondary);">$1,847</span></li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Rent Equalization:</strong> <span id="co-equalization-effect" style="font-weight: 600; color: var(--color-secondary);">$400 / mo offset</span> <span style="font-size: 0.8rem; color: var(--color-text-muted);">(lowers your monthly cost)</span></li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>Home Quality:</strong> Brand new construction, 3,500 sq ft, high-end neighborhood.</li>
+                                        <li style="margin-bottom: var(--space-xs); padding-left: 20px;"><strong>5-Year Wealth Build (Equity):</strong> <span id="co-5yr-equity" style="font-weight: 700; color: var(--color-secondary);">$207,927</span></li>
+                                    </ul>
+                                    
+                                    <div class="wealth-advantage-highlight" style="background-color: rgba(74, 124, 89, 0.08); border: 1.5px solid var(--color-secondary); padding: var(--space-sm); border-radius: var(--radius-sm); text-align: center; font-size: 0.95rem; font-weight: 700; color: var(--color-secondary);">
+                                        Net Wealth Advantage: +<span id="net-wealth-adv">$143,127</span> in cash
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
