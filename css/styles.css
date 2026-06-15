@@ -481,28 +481,28 @@ p {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.family-photo {
-    width: 100%;
+.letter-logo {
+    float: right;
+    width: 140px;
+    max-width: 35%;
     height: auto;
-    max-height: 350px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    margin-bottom: var(--space-md);
+    margin-left: var(--space-md);
+    margin-bottom: var(--space-sm);
+    margin-top: 2px;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.letter-logo:hover {
+    transform: scale(1.03);
 }
 
 @media (min-width: 769px) {
-    .family-photo {
-        float: right;
-        width: 360px;
-        max-width: 40%;
-        height: auto;
-        max-height: 450px;
+    .letter-logo {
+        width: 180px;
         margin-left: var(--space-lg);
         margin-bottom: var(--space-md);
         margin-top: 5px;
-        display: block;
     }
     
     .letter-signature,
@@ -530,9 +530,30 @@ p {
 }
 
 .letter-signature {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    clear: both;
+}
+
+.signature-family-photo {
+    width: 150px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 3px solid #FFF;
+    transform: rotate(1.5deg);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    display: block;
+}
+
+.signature-family-photo:hover {
+    transform: rotate(0deg) scale(1.06);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .letter-names {
