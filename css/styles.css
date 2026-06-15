@@ -3060,7 +3060,14 @@ body.secondary-page .main-content {
     line-height: 1.6;
     color: var(--color-text-main);
     margin: 0;
+}
+
+.vision-card-body:last-of-type {
     flex-grow: 1;
+}
+
+.vision-card-body:not(:last-of-type) {
+    margin-bottom: 0.8rem;
 }
 
 /* Mobile responsive adjustments */
