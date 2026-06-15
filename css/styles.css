@@ -2772,3 +2772,28 @@ input[type="range"]::-moz-range-thumb:hover {
 .learn-more-btn:hover svg {
     transform: translateX(4px);
 }
+
+/* Bottom Back Navigation Button */
+.bottom-nav-container {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-xl) 0 var(--space-md) 0;
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.bottom-back-btn {
+    border: 1px solid rgba(90, 122, 104, 0.2);
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+    box-shadow: var(--shadow-sm);
+    background-color: var(--color-surface);
+}
+
+.bottom-back-btn:hover {
+    border-color: var(--color-accent);
+    background-color: rgba(217, 119, 87, 0.05); /* Soft Terracotta tint */
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: var(--color-accent);
+}

@@ -1098,6 +1098,27 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.observe(section);
     });
 
+    // 7. Back home link history integration to go back "where they left off"
+    const backHomeLinks = document.querySelectorAll('.back-home-link');
+    backHomeLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+                try {
+                    const referrerURL = new URL(document.referrer);
+                    const isHomePage = referrerURL.pathname === '/' || 
+                                       referrerURL.pathname.endsWith('/index.html') || 
+                                       referrerURL.pathname.endsWith('/');
+                    if (isHomePage) {
+                        e.preventDefault();
+                        window.history.back();
+                    }
+                } catch (err) {
+                    console.error("Referrer parsing failed:", err);
+                }
+            }
+        });
+    });
+
     // Initial load
     if (propGrid) {
         filterAndSortProperties();
