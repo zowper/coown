@@ -481,6 +481,17 @@ p {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.family-photo {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin-bottom: var(--space-md);
+    display: block;
+}
+
 @media (min-width: 769px) {
     .family-photo {
         float: right;
@@ -498,17 +509,6 @@ p {
     .letter-ps {
         clear: right;
     }
-}
-
-.family-photo {
-    width: 100%;
-    height: auto;
-    max-height: 350px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    margin-bottom: var(--space-md);
-    display: block;
 }
 
 .letter-greeting {
