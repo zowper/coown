@@ -650,10 +650,12 @@ p {
     display: flex;
     flex-direction: column;
     position: relative;
+    transform: translate3d(0, 0, 0);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .house-compare-card:hover {
-    transform: translateY(-4px);
+    transform: translate3d(0, -4px, 0);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
@@ -663,7 +665,7 @@ p {
 }
 
 .house-compare-card.highlight-card:hover {
-    transform: translateY(-4px);
+    transform: translate3d(0, -4px, 0);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
@@ -687,6 +689,10 @@ p {
     height: 240px;
     overflow: hidden;
     background-color: var(--color-surface-alt);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    transform: translate3d(0, 0, 0);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .house-img {
@@ -2935,6 +2941,8 @@ body.secondary-page .main-content {
     position: relative;
     overflow: hidden;
     padding: 0;
+    transform: translate3d(0, 0, 0);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 /* Accent Borders */
@@ -2946,7 +2954,7 @@ body.secondary-page .main-content {
 }
 
 .vision-card:hover {
-    transform: translateY(-6px);
+    transform: translate3d(0, -6px, 0);
     box-shadow: var(--shadow-lg);
 }
 .vision-card.accent-sage:hover {
@@ -2963,6 +2971,10 @@ body.secondary-page .main-content {
     width: 100%;
     overflow: hidden;
     background-color: var(--color-surface-alt);
+    border-top-left-radius: calc(var(--radius-lg) - 1px);
+    border-top-right-radius: calc(var(--radius-lg) - 1px);
+    transform: translate3d(0, 0, 0);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
 .vision-card-img {
