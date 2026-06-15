@@ -3285,5 +3285,74 @@ body.secondary-page .main-content {
     }
 }
 
+/* Roadmap Timeline & Safety Safeguards Layouts */
+.timeline-roadmap {
+    display: flex;
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+}
+
+.roadmap-step {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    flex: 1;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+}
+
+.roadmap-step:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.roadmap-step h4 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-primary-light);
+    margin: var(--space-sm) 0 var(--space-xs) 0;
+}
+
+.roadmap-step p {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.step-badge {
+    background-color: var(--color-secondary);
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+    align-self: flex-start;
+}
+
+.roadmap-step.highlight-step {
+    border: 2px solid var(--color-accent);
+    box-shadow: var(--shadow-md);
+}
+
+.roadmap-step.highlight-step .step-badge {
+    background-color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+    .timeline-roadmap {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+}
+
+
 
 
