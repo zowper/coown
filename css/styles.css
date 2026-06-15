@@ -528,6 +528,33 @@ p {
     margin-bottom: 1.5rem;
 }
 
+.letter-body ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.letter-body li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text-main);
+}
+
+.letter-body li::before {
+    content: '•';
+    position: absolute;
+    left: 8px;
+    top: -1px;
+    color: #4A7C59;
+    font-weight: bold;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
 .letter-signature {
     margin-top: 2rem;
     display: flex;
