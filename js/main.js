@@ -1081,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Scroll-Reveal Animation Logic
     const revealSections = document.querySelectorAll('.reveal-on-scroll');
     const revealObserverOptions = {
-        threshold: 0.15,
+        threshold: 0.05,
         rootMargin: '0px 0px -55px 0px'
     };
 
@@ -1097,6 +1097,17 @@ document.addEventListener('DOMContentLoaded', () => {
     revealSections.forEach(section => {
         revealObserver.observe(section);
     });
+
+    // Programmatic reveal for "How it Works" CTA to ensure `#vision` appears immediately when clicked
+    const heroCtaBtn = document.querySelector('.hero-cta-btn');
+    if (heroCtaBtn) {
+        heroCtaBtn.addEventListener('click', () => {
+            const visionSection = document.getElementById('vision');
+            if (visionSection) {
+                visionSection.classList.add('revealed');
+            }
+        });
+    }
 
     // 7. Back home link history integration to go back "where they left off"
     const backHomeLinks = document.querySelectorAll('.back-home-link');
