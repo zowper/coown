@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Market - Active single-family home listings in Davis County that fit our exact co-ownership criteria. Prepared by Jared, Melinda, & Nelson Carter.">
+    <title>Market - Co-own: Home Co-ownership Informational Platform</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/zowper/co-own/main/assets/favicon.png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Top Glassmorphic Navigation Header -->
+    <header class="top-header" id="top-header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="https://raw.githubusercontent.com/zowper/co-own/main/assets/Springboard-Logo.png" alt="Springboard Logo" class="logo-img">
+            </a>
+            <a href="index.html" class="back-home-link">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <div class="layout-wrapper">
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Market Section -->
+            <section id="market" class="section revealed">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Market</h2>
+                        <p>Active single-family home listings in Davis County that fit our exact co-ownership criteria.</p>
+                    </div>
+
+                    <!-- Sub-section: Current Opportunities -->
+                    <div class="sub-section" id="properties">
+                        <h3 class="sub-section-title">Current Opportunities</h3>
+                        <p>To ground this proposal in reality, we have researched active listings in Davis County that fit our exact co-ownership criteria.</p>
+                        <p>These homes feature spacious layouts, little to no HOA fees, and properties highly suitable for private, independent daylight apartments.</p>
+                        
+                        <div class="market-advantage-card">
+                            <h3>The New Construction Advantage</h3>
+                            <p>New construction homes represent the ultimate value multiplier for co-ownership. By targeting developments like the Woodside Homes communities in Clinton, we can acquire turnkey modern quality from day one and completely bypass the maintenance backlog and hidden renovation costs of older starter homes. These properties offer contemporary layouts that are naturally suited for independent downstairs living, providing spacious daylight walk-outs and separate structural zones that make private dual-living seamless and comfortable.</p>
+                        </div>
+                        
+                        <!-- Interactive Filter Card -->
+                        <div class="filter-card">
+                            <div class="filter-controls-row">
+                                <div class="filter-col search-col">
+                                    <label for="search-input">Search Properties</label>
+                                    <div class="filter-input-wrapper">
+                                        <input type="text" id="search-input" placeholder="Search address, city...">
+                                    </div>
+                                </div>
+                                <div class="filter-col select-col">
+                                    <label for="city-filter">City</label>
+                                    <select id="city-filter">
+                                        <option value="all">All Cities</option>
+                                        <option value="Clearfield">Clearfield</option>
+                                        <option value="Layton">Layton</option>
+                                        <option value="Syracuse">Syracuse</option>
+                                        <option value="West Point">West Point</option>
+                                        <option value="Clinton">Clinton</option>
+                                        <option value="Kaysville">Kaysville</option>
+                                        <option value="Farmington">Farmington</option>
+                                        <option value="South Weber">South Weber</option>
+                                        <option value="Riverdale">Riverdale</option>
+                                    </select>
+                                </div>
+                                <div class="filter-col select-col">
+                                    <label for="sort-by">Sort By</label>
+                                    <select id="sort-by">
+                                        <option value="rating-desc">Rating: High to Low</option>
+                                        <option value="price-asc">Price: Low to High</option>
+                                        <option value="price-desc">Price: High to Low</option>
+                                        <option value="sqft-desc">Sq. Ft.: High to Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="filter-toggles-row">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="toggle-downstairs">
+                                    <span class="custom-checkbox"></span>
+                                    <span>Has Downstairs</span>
+                                </label>
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="toggle-entrance">
+                                    <span class="custom-checkbox"></span>
+                                    <span>Private Entrance</span>
+                                </label>
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="toggle-no-hoa">
+                                    <span class="custom-checkbox"></span>
+                                    <span>No HOA Fee</span>
+                                </label>
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="toggle-basement">
+                                    <span class="custom-checkbox"></span>
+                                    <span>Finished Basement</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Results Count Summary -->
+                        <div class="results-meta-row">
+                            <span id="results-count" class="results-count-text">Showing 0 of 0 properties</span>
+                        </div>
+
+                        <!-- Dynamic Property Grid -->
+                        <div class="prop-grid" id="prop-grid">
+                            <!-- Dynamically populated by main.js -->
+                        </div>
+
+                        <!-- Pagination Action -->
+                        <div id="show-more-container" class="show-more-container">
+                            <button id="btn-show-more" class="btn btn-primary">Show More Properties</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <p style="margin-top: var(--space-xs);">A collaborative home co-ownership resource prepared by Jared, Melinda, & Nelson Carter.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Documents</h4>
+                    <ul class="footer-links">
+                        <li><a href="context/Co-Ownership Guide.pdf" target="_blank">Download Guide PDF</a></li>
+                        <li><a href="context/Premium Family Co-Ownership Guide - Elegant Text Edition.docx" target="_blank">Word Version (.docx)</a></li>
+                        <li><a href="context/Co-Ownership Exit Plan.xlsx" target="_blank">Download Exit Math (.xlsx)</a></li>
+                        <li><a href="context/Property Data (Co-Ownership Route).xlsx" target="_blank">Property Sheet (.xlsx)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Disclaimers</h4>
+                    <p style="font-size: 0.8rem; line-height: 1.5; color: #BDC8C1;">This website is prepared for private discussion with family and friends. It does not constitute formal financial, legal, or investment advice. Any purchase should involve independent legal counsel.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Jared, Melinda, & Nelson Carter. All rights reserved.</p>
+                <div class="footer-links" style="flex-direction: row; gap: var(--space-md);">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Property Comparison Floating Tray -->
+    <div class="compare-tray" id="compare-tray">
+        <div class="compare-tray-content">
+            <div class="compare-tray-title">Compare Properties (<span id="compare-count">0</span>/3 selected)</div>
+            <div class="compare-thumbnails" id="compare-thumbnails">
+                <!-- Selected properties thumbnails will appear here -->
+            </div>
+            <div class="compare-tray-actions">
+                <button class="btn btn-primary" id="btn-compare-now" disabled>Compare Now</button>
+                <button class="btn btn-secondary" id="btn-compare-clear" style="padding: 0.4rem 0.9rem; font-size: 0.85rem; border-color: rgba(255,255,255,0.2); color: white;">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Modal -->
+    <div class="compare-modal-overlay" id="compare-modal-overlay">
+        <div class="compare-modal">
+            <div class="compare-modal-header">
+                <h3>Property Comparison Table</h3>
+                <button class="compare-modal-close" id="compare-modal-close">&times;</button>
+            </div>
+            <div class="compare-modal-body" id="compare-modal-body">
+                <!-- side by side table comparison will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/properties-data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

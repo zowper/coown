@@ -184,19 +184,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = item.querySelector('.faq-question-btn');
         const answer = item.querySelector('.faq-answer');
 
-        btn.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
-            
-            faqItems.forEach(otherItem => {
-                otherItem.classList.remove('active');
-                otherItem.querySelector('.faq-answer').style.maxHeight = null;
-            });
+        if (btn && answer) {
+            btn.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    const otherAnswer = otherItem.querySelector('.faq-answer');
+                    if (otherAnswer) {
+                        otherAnswer.style.maxHeight = null;
+                    }
+                });
 
-            if (!isActive) {
-                item.classList.add('active');
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-            }
-        });
+                if (!isActive) {
+                    item.classList.add('active');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+        }
     });
 
     // 3. Rent Equalization Calculator
@@ -574,10 +579,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        tlHomeValue.textContent = '$' + Math.round(data.val).toLocaleString();
-        tlMortgageLeft.textContent = '$' + Math.round(data.loan).toLocaleString();
-        tlJointEquity.textContent = '$' + Math.round(data.equity).toLocaleString();
-        tlBuyoutNeeded.innerHTML = data.buyoutHtml;
+        if (tlHomeValue) tlHomeValue.textContent = '$' + Math.round(data.val).toLocaleString();
+        if (tlMortgageLeft) tlMortgageLeft.textContent = '$' + Math.round(data.loan).toLocaleString();
+        if (tlJointEquity) tlJointEquity.textContent = '$' + Math.round(data.equity).toLocaleString();
+        if (tlBuyoutNeeded) tlBuyoutNeeded.innerHTML = data.buyoutHtml;
         if (tlLtv90) {
             tlLtv90.textContent = '$' + Math.max(0, Math.round(data.l90)).toLocaleString();
         }
@@ -585,16 +590,13 @@ document.addEventListener('DOMContentLoaded', () => {
             tlLtv80.textContent = '$' + Math.max(0, Math.round(data.l80)).toLocaleString();
         }
 
-
-
-
         // Description text updates
         const line1 = getLtvBuyoutStatus("A 90% LTV loan", data.l90, data.buyoutA, data.buyoutB, data.splitA);
         const line2 = getLtvBuyoutStatus("An 80% LTV loan", data.l80, data.buyoutA, data.buyoutB, data.splitA);
         const note = "Note: A single green checkmark appears once a 90% LTV loan is feasible and two green checkmarks appear when an 80% LTV loan is feasible.";
         
         const statusHtml = `${line1}<br><br>${line2}<br><br><span style="font-style: italic;">${note}</span>`;
-        tlStatusDesc.innerHTML = statusHtml;
+        if (tlStatusDesc) tlStatusDesc.innerHTML = statusHtml;
     }
 
     if (tlRange) {
@@ -611,6 +613,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Run first calculation on load
     calculateEqualization();
+
+    // Check if there is a pending property to load into the calculator from another page
+    const pendingMls = localStorage.getItem('coown_load_mls');
+    if (pendingMls) {
+        localStorage.removeItem('coown_load_mls');
+        const prop = PROPERTIES_DATA.find(p => p.mls === pendingMls);
+        if (prop) {
+            if (timelineHomeValueInput) {
+                timelineHomeValueInput.value = prop.price;
+            }
+            const estMainRatio = 0.00293;
+            const estAduRatio = prop.downstairs === 'Yes' ? 0.00187 : 0.0015;
+            
+            const estMain = Math.round(prop.price * estMainRatio);
+            const estAdu = Math.round(prop.price * estAduRatio);
+            
+            if (rentMainInput) rentMainInput.value = estMain;
+            if (rentAduInput) rentAduInput.value = estAdu;
+
+            const hoaVal = prop.hoa_fee || 0;
+            globalMonthlyExpenses = 800 + hoaVal;
+            if (expensesInput) {
+                expensesInput.value = 800 + hoaVal;
+            }
+            
+            // Re-run calculation with loaded property values
+            calculateEqualization();
+            
+            // Highlight flash animation on the calculator panel
+            const calcPanel = document.querySelector('.calc-panel-left');
+            if (calcPanel) {
+                calcPanel.classList.add('highlight-flash');
+                setTimeout(() => {
+                    calcPanel.classList.remove('highlight-flash');
+                }, 1000);
+            }
+        }
+    }
 
     // 5. Dynamic Property Showcase Controller
     const searchInput = document.getElementById('search-input');
@@ -742,6 +782,14 @@ document.addEventListener('DOMContentLoaded', () => {
         loadBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const mls = btn.getAttribute('data-mls');
+                
+                // Redirect if calculator elements are not on the current page
+                if (!timelineHomeValueInput) {
+                    localStorage.setItem('coown_load_mls', mls);
+                    window.location.href = 'numbers.html';
+                    return;
+                }
+
                 const prop = PROPERTIES_DATA.find(p => p.mls === mls);
                 if (prop) {
                     // Populate Price
