@@ -552,10 +552,10 @@ p {
     content: '•';
     position: absolute;
     left: 8px;
-    top: -1px;
-    color: #4A7C59;
+    top: 0;
+    color: var(--color-text-main);
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     line-height: 1;
 }
 
