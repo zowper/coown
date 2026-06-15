@@ -2976,6 +2976,11 @@ body.secondary-page .main-content {
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
+.vision-card-image-container.split-images {
+    display: flex;
+    flex-direction: row;
+}
+
 .vision-card-img {
     width: 100%;
     height: 100%;
@@ -2983,7 +2988,19 @@ body.secondary-page .main-content {
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+.vision-card-img-split {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
 .vision-card:hover .vision-card-img {
+    transform: scale(1.05);
+}
+
+.vision-card:hover .vision-card-img-split {
     transform: scale(1.05);
 }
 
