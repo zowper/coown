@@ -1125,13 +1125,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const video1 = document.getElementById('hero-video-1');
         const video2 = document.getElementById('hero-video-2');
         
-        const videoUrls = [
-            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Cinematic_drone_shot_slow_swe.mp4",
-            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a.mp4",
-            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(1).mp4",
-            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(2).mp4",
-            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(3).mp4",
-            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Smooth_aerial_drone_push_in_sh.mp4"
+        // Hardcoded fallbacks in case GitHub API fails or is rate-limited
+        const fallbackVideoUrls = [
+            "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Cinematic_drone_shot_slow_swe.mp4",
+            "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Slow_sweeping_drone_shot_of_a.mp4",
+            "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(1).mp4",
+            "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(2).mp4",
+            "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(3).mp4",
+            "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Smooth_aerial_drone_push_in_sh.mp4"
         ];
         
         // Shuffle helper using Fisher-Yates algorithm
@@ -1144,49 +1145,102 @@ document.addEventListener('DOMContentLoaded', () => {
             return arr;
         }
         
-        // Setup state variables
-        let playlist = shuffle(videoUrls);
+        let playlist = [];
+        let allFetchedUrls = [];
         let currentPlaylistIndex = 0;
         let activeVideo = video1;
         let idleVideo = video2;
         let transitionInProgress = false;
         let isHeroVisible = true; // Default to true, updated by IntersectionObserver
+        let playlistInitialized = false;
         
-        // Dynamic playlist builder to prevent consecutive repetitions and support infinite shuffling
-        function checkAndExtendPlaylist() {
-            if (playlist.length - currentPlaylistIndex < 4) {
-                let newBatch = shuffle(videoUrls);
-                const lastItem = playlist[playlist.length - 1];
-                if (newBatch[0] === lastItem) {
-                    // Swap first and second elements in newBatch to prevent consecutive repeat
-                    const temp = newBatch[0];
-                    newBatch[0] = newBatch[1];
-                    newBatch[1] = temp;
+        // Dynamically fetch all videos in the repository's assets/videos folder
+        async function fetchVideoUrls() {
+            // Try springboard repository first
+            try {
+                const response = await fetch("https://api.github.com/repos/zowper/springboard/contents/assets/videos");
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data)) {
+                        const dynamicUrls = data
+                            .filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".mp4"))
+                            .map(item => item.download_url);
+                        if (dynamicUrls.length > 0) return dynamicUrls;
+                    }
                 }
-                playlist = playlist.concat(newBatch);
-                
-                // Keep the playlist queue bounded to save memory
-                if (currentPlaylistIndex > 20) {
-                    playlist = playlist.slice(currentPlaylistIndex - 2);
-                    currentPlaylistIndex = 2;
-                }
+            } catch (err) {
+                console.warn("Failed to fetch from springboard repo contents API:", err);
             }
+
+            // Try co-own repository as fallback
+            try {
+                const response = await fetch("https://api.github.com/repos/zowper/co-own/contents/assets/videos");
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data)) {
+                        const dynamicUrls = data
+                            .filter(item => item.type === "file" && item.name.toLowerCase().endsWith(".mp4"))
+                            .map(item => item.download_url);
+                        if (dynamicUrls.length > 0) return dynamicUrls;
+                    }
+                }
+            } catch (err) {
+                console.warn("Failed to fetch from co-own repo contents API:", err);
+            }
+
+            return fallbackVideoUrls;
         }
         
         if (video1 && video2) {
-            // Set initial sources from the first shuffled batch
-            video1.src = playlist[0];
-            video1.style.opacity = '1';
-            video1.classList.add('active');
-            
-            video2.src = playlist[1];
-            video2.style.opacity = '0';
-            video2.classList.remove('active');
-            
-            // Try to autoplay first video
-            video1.play().catch(error => {
-                console.log("Autoplay blocked or failed, waiting for user interaction:", error);
+            // Fetch videos and initialize the player
+            fetchVideoUrls().then(urls => {
+                allFetchedUrls = urls;
+                playlist = shuffle(urls);
+                playlistInitialized = true;
+                
+                // Set initial sources from the first shuffled batch
+                video1.src = playlist[0];
+                video1.style.opacity = '1';
+                video1.classList.add('active');
+                
+                // Preload second video
+                if (playlist.length > 1) {
+                    video2.src = playlist[1];
+                    video2.style.opacity = '0';
+                    video2.classList.remove('active');
+                }
+                
+                // Try to play first video if hero is currently visible and active
+                if (isHeroVisible && !document.hidden) {
+                    video1.play().catch(error => {
+                        console.log("Autoplay blocked or failed, waiting for user interaction:", error);
+                    });
+                }
+                
+                setupVideoListeners(video1);
+                setupVideoListeners(video2);
             });
+            
+            // Dynamic playlist builder to prevent consecutive repetitions and support infinite shuffling
+            function checkAndExtendPlaylist(urls) {
+                if (playlist.length - currentPlaylistIndex < 4) {
+                    let newBatch = shuffle(urls);
+                    const lastItem = playlist[playlist.length - 1];
+                    if (newBatch[0] === lastItem) {
+                        // Swap first and second elements in newBatch to prevent consecutive repeat
+                        const temp = newBatch[0];
+                        newBatch[0] = newBatch[1];
+                        newBatch[1] = temp;
+                    }
+                    playlist = playlist.concat(newBatch);
+                    
+                    // Keep the playlist queue bounded to save memory
+                    if (currentPlaylistIndex > 20) {
+                        playlist = playlist.slice(currentPlaylistIndex - 2);
+                        currentPlaylistIndex = 2;
+                    }
+                }
+            }
             
             function setupVideoListeners(videoEl) {
                 videoEl.addEventListener('timeupdate', () => {
@@ -1203,18 +1257,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
             
-            setupVideoListeners(video1);
-            setupVideoListeners(video2);
-            
             function transitionToNextVideo() {
                 transitionInProgress = true;
                 
                 const nextIndex = currentPlaylistIndex + 1;
-                
                 const oldActive = activeVideo;
                 const newActive = idleVideo;
                 
-                // Play next video
                 newActive.play().then(() => {
                     newActive.classList.add('active');
                     newActive.style.opacity = '1';
@@ -1230,8 +1279,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         idleVideo = oldActive;
                         currentPlaylistIndex = nextIndex;
                         
-                        // Reshuffle and append more videos if needed, then perform queue cleanup
-                        checkAndExtendPlaylist();
+                        // Reshuffle and append more videos if needed, then perform queue cleanup using cached list
+                        checkAndExtendPlaylist(allFetchedUrls);
                         
                         // Preload the next video in the playlist queue
                         oldActive.src = playlist[currentPlaylistIndex + 1];
@@ -1248,22 +1297,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // Visibility Handling: Pause videos when hero section scrolls out of view or tab is hidden
             if ('IntersectionObserver' in window) {
                 const observerOptions = {
-                    root: null, // viewport
-                    threshold: 0.15 // trigger when 15% of the hero section is visible
+                    root: null,
+                    threshold: 0.15
                 };
                 
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         isHeroVisible = entry.isIntersecting;
                         if (isHeroVisible) {
-                            if (!document.hidden) {
+                            if (!document.hidden && playlistInitialized && activeVideo && activeVideo.src) {
                                 activeVideo.play().catch(err => {
                                     console.log("Failed to resume hero video on visibility intersection:", err);
                                 });
                             }
                         } else {
-                            activeVideo.pause();
-                            idleVideo.pause();
+                            if (activeVideo) activeVideo.pause();
+                            if (idleVideo) idleVideo.pause();
                         }
                     });
                 }, observerOptions);
@@ -1274,9 +1323,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Pause videos when the user switches browser tabs or minimizes browser
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
-                    activeVideo.pause();
-                    idleVideo.pause();
-                } else if (isHeroVisible) {
+                    if (activeVideo) activeVideo.pause();
+                    if (idleVideo) idleVideo.pause();
+                } else if (isHeroVisible && playlistInitialized && activeVideo && activeVideo.src) {
                     activeVideo.play().catch(err => {
                         console.log("Failed to play active video on visibility change:", err);
                     });
