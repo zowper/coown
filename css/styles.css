@@ -2665,3 +2665,32 @@ input[type="range"]::-moz-range-thumb:hover {
     }
 }
 
+/* Sub-section Styles for Rearranged Layout */
+.sub-section {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+.section-alt .sub-section {
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.sub-section:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.sub-section-title {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--color-primary-light);
+    margin-bottom: var(--space-md);
+    letter-spacing: -0.3px;
+    border-left: 3px solid var(--color-secondary);
+    padding-left: var(--space-xs);
+}
+
+
