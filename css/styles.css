@@ -2435,6 +2435,10 @@ input[type="range"]::-moz-range-thumb:hover {
     }
 
     .letter-card {
+        margin-left: calc(-1 * var(--space-md));
+        margin-right: calc(-1 * var(--space-md));
+        border-radius: 0;
+        box-shadow: none;
         padding: var(--space-md) var(--space-md) var(--space-sm) var(--space-md);
     }
     
