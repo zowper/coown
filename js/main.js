@@ -1119,6 +1119,94 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // 8. Hero Section Video Background Playlist and Transition Logic
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+        const video1 = document.getElementById('hero-video-1');
+        const video2 = document.getElementById('hero-video-2');
+        
+        const videoUrls = [
+            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Cinematic_drone_shot_slow_swe.mp4",
+            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a.mp4",
+            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(1).mp4",
+            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(2).mp4",
+            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Slow_sweeping_drone_shot_of_a%20(3).mp4",
+            "https://raw.githubusercontent.com/zowper/co-own/main/assets/videos/Smooth_aerial_drone_push_in_sh.mp4"
+        ];
+        
+        let currentVideoIndex = 0;
+        let activeVideo = video1;
+        let idleVideo = video2;
+        let transitionInProgress = false;
+        
+        if (video1 && video2) {
+            // Set initial sources
+            video1.src = videoUrls[0];
+            video1.style.opacity = '1';
+            video1.classList.add('active');
+            
+            video2.src = videoUrls[1];
+            video2.style.opacity = '0';
+            video2.classList.remove('active');
+            
+            // Try to autoplay first video
+            video1.play().catch(error => {
+                console.log("Autoplay blocked or failed, waiting for user interaction:", error);
+            });
+            
+            function setupVideoListeners(videoEl) {
+                videoEl.addEventListener('timeupdate', () => {
+                    // Start fade 1.5 seconds before the video ends
+                    if (videoEl === activeVideo && !transitionInProgress && videoEl.duration && videoEl.currentTime >= videoEl.duration - 1.5) {
+                        transitionToNextVideo();
+                    }
+                });
+                
+                videoEl.addEventListener('ended', () => {
+                    if (videoEl === activeVideo && !transitionInProgress) {
+                        transitionToNextVideo();
+                    }
+                });
+            }
+            
+            setupVideoListeners(video1);
+            setupVideoListeners(video2);
+            
+            function transitionToNextVideo() {
+                transitionInProgress = true;
+                
+                const nextIndex = (currentVideoIndex + 1) % videoUrls.length;
+                const indexAfterNext = (nextIndex + 1) % videoUrls.length;
+                
+                const oldActive = activeVideo;
+                const newActive = idleVideo;
+                
+                // Play next video
+                newActive.play().then(() => {
+                    newActive.classList.add('active');
+                    newActive.style.opacity = '1';
+                    
+                    oldActive.classList.remove('active');
+                    oldActive.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        oldActive.pause();
+                        oldActive.src = videoUrls[indexAfterNext];
+                        oldActive.load();
+                        
+                        activeVideo = newActive;
+                        idleVideo = oldActive;
+                        currentVideoIndex = nextIndex;
+                        transitionInProgress = false;
+                    }, 1500); // Wait for CSS opacity transition to complete
+                }).catch(err => {
+                    console.log("Failed to play next video, skipping fade:", err);
+                    transitionInProgress = false;
+                });
+            }
+        }
+    }
+
     // Initial load
     if (propGrid) {
         filterAndSortProperties();
