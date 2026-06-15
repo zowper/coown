@@ -1135,16 +1135,6 @@ document.addEventListener('DOMContentLoaded', () => {
             "https://raw.githubusercontent.com/zowper/springboard/main/assets/videos/Smooth_aerial_drone_push_in_sh.mp4"
         ];
         
-        // Shuffle helper using Fisher-Yates algorithm
-        function shuffle(array) {
-            const arr = [...array];
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
-        
         let playlist = [];
         let allFetchedUrls = [];
         let currentPlaylistIndex = 0;
@@ -1153,6 +1143,34 @@ document.addEventListener('DOMContentLoaded', () => {
         let transitionInProgress = false;
         let isHeroVisible = true; // Default to true, updated by IntersectionObserver
         let playlistInitialized = false;
+        let recentClips = [];
+        const MIN_REPEAT_DISTANCE = 6; // Do not repeat same clip within 6 plays
+        
+        // Helper to select the next random video while preventing it from playing too close to the last time
+        function getNextPlaylistItem(urls) {
+            if (!urls || urls.length === 0) return null;
+            
+            // Filter out recently played clips
+            let available = urls.filter(url => !recentClips.includes(url));
+            
+            // Fallback: if somehow no clips are available, reset history
+            if (available.length === 0) {
+                recentClips = [];
+                available = urls;
+            }
+            
+            // Select a random clip from the available ones
+            const randomIndex = Math.floor(Math.random() * available.length);
+            const selectedUrl = available[randomIndex];
+            
+            // Add to history
+            recentClips.push(selectedUrl);
+            if (recentClips.length > MIN_REPEAT_DISTANCE) {
+                recentClips.shift();
+            }
+            
+            return selectedUrl;
+        }
         
         // Dynamically fetch all videos in the repository's assets/videos folder
         async function fetchVideoUrls() {
@@ -1195,10 +1213,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fetch videos and initialize the player
             fetchVideoUrls().then(urls => {
                 allFetchedUrls = urls;
-                playlist = shuffle(urls);
                 playlistInitialized = true;
                 
-                // Set initial sources from the first shuffled batch
+                // Initialize the playlist queue with first 10 items
+                for (let i = 0; i < 10; i++) {
+                    playlist.push(getNextPlaylistItem(urls));
+                }
+                
+                // Set initial sources
                 video1.src = playlist[0];
                 video1.style.opacity = '1';
                 video1.classList.add('active');
@@ -1223,22 +1245,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Dynamic playlist builder to prevent consecutive repetitions and support infinite shuffling
             function checkAndExtendPlaylist(urls) {
-                if (playlist.length - currentPlaylistIndex < 4) {
-                    let newBatch = shuffle(urls);
-                    const lastItem = playlist[playlist.length - 1];
-                    if (newBatch[0] === lastItem) {
-                        // Swap first and second elements in newBatch to prevent consecutive repeat
-                        const temp = newBatch[0];
-                        newBatch[0] = newBatch[1];
-                        newBatch[1] = temp;
-                    }
-                    playlist = playlist.concat(newBatch);
-                    
-                    // Keep the playlist queue bounded to save memory
-                    if (currentPlaylistIndex > 20) {
-                        playlist = playlist.slice(currentPlaylistIndex - 2);
-                        currentPlaylistIndex = 2;
-                    }
+                while (playlist.length - currentPlaylistIndex < 6) {
+                    playlist.push(getNextPlaylistItem(urls));
+                }
+                
+                // Keep the playlist queue bounded to save memory
+                if (currentPlaylistIndex > 20) {
+                    playlist = playlist.slice(currentPlaylistIndex - 2);
+                    currentPlaylistIndex = 2;
                 }
             }
             
