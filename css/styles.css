@@ -483,8 +483,8 @@ p {
 
 .letter-logo {
     float: right;
-    width: 140px;
-    max-width: 35%;
+    width: 350px;
+    max-width: 40%;
     height: auto;
     margin-left: var(--space-md);
     margin-bottom: var(--space-sm);
@@ -499,7 +499,6 @@ p {
 
 @media (min-width: 769px) {
     .letter-logo {
-        width: 180px;
         margin-left: var(--space-lg);
         margin-bottom: var(--space-md);
         margin-top: 5px;
