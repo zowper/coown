@@ -2286,7 +2286,7 @@ input[type="range"]::-moz-range-thumb:hover {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     overflow: hidden;
-    height: 800px;
+    height: auto;
     width: 100%;
     margin-top: var(--space-lg);
     position: relative;
@@ -2357,30 +2357,55 @@ input[type="range"]::-moz-range-thumb:hover {
 
 .pdf-pages-container {
     flex: 1;
-    overflow: auto;
-    padding: var(--space-md);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: var(--space-md);
+    overflow: hidden;
+    padding: var(--space-md) 0;
     position: relative;
+    width: 100%;
+}
+
+.pdf-slider {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.3, 1);
+    will-change: transform;
+    height: 100%;
+    width: auto;
 }
 
 .pdf-page-wrapper {
     background-color: var(--color-surface);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border-radius: 4px;
+    flex-shrink: 0;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: transform 0.2s ease;
+    opacity: 0.6;
+    transform: scale(0.96);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.3, 1),
+                opacity 0.4s cubic-bezier(0.25, 1, 0.3, 1),
+                border-color 0.4s cubic-bezier(0.25, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.25, 1, 0.3, 1),
+                width 0.3s ease,
+                height 0.3s ease;
+    z-index: 1;
+}
+
+.pdf-page-wrapper.active {
+    opacity: 1;
+    transform: scale(1.02);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-xl), 0 0 0 1px var(--color-primary);
+    z-index: 2;
 }
 
 .pdf-page-wrapper canvas {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 100%;
     display: block;
 }
 
@@ -2442,7 +2467,7 @@ input[type="range"]::-moz-range-thumb:hover {
 
 @media (max-width: 768px) {
     .contract-viewer-wrapper {
-        height: 600px;
+        height: auto;
     }
     
     .pdf-toolbar {
@@ -2450,15 +2475,7 @@ input[type="range"]::-moz-range-thumb:hover {
     }
     
     .pdf-pages-container {
-        flex-direction: column;
-        align-items: center;
-        gap: var(--space-md);
-        padding: var(--space-sm);
-    }
-    
-    .pdf-page-wrapper {
-        width: 100%;
-        max-width: 100%;
+        padding: var(--space-sm) 0;
     }
 }
 
