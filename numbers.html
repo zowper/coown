@@ -73,16 +73,20 @@
                                 <!-- Split Selection Slider -->
                                 <div class="input-group timeline-slider-span">
                                     <label>Ownership Split</label>
-                                    <div class="split-slider-wrapper" style="display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 5px;">
-                                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-main); white-space: nowrap;" id="timeline-split-label-a">50%</span>
-                                        <input type="range" id="timeline-split-slider" min="10" max="90" value="50" step="1" style="flex-grow: 1;">
-                                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-main); white-space: nowrap;" id="timeline-split-label-b">50%</span>
+                                    <div class="split-slider-wrapper">
+                                        <span id="timeline-split-label-a">50%</span>
+                                        <input type="range" id="timeline-split-slider" min="10" max="90" value="50" step="1">
+                                        <span id="timeline-split-label-b">50%</span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Slider Axis -->
                             <div class="slider-timeline-axis">
+                                <div class="timeline-slider-header">
+                                    <span>Simulation Timeline</span>
+                                    <span id="timeline-year-badge">Year 5.0</span>
+                                </div>
                                 <input type="range" id="timeline-range" min="0" max="10" value="5" step="1" style="margin-bottom: 6px;">
                                 <div class="timeline-axis-ticks">
                                     <div class="timeline-tick">
@@ -189,10 +193,10 @@
                                     <!-- Split Selection Slider -->
                                     <div class="input-group calc-full">
                                         <label>Ownership Split (Governs Down Payment & Joint Bills)</label>
-                                        <div class="split-slider-wrapper" style="display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 5px;">
-                                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-main);" id="split-label-a">Upstairs Family: 50%</span>
-                                            <input type="range" id="split-slider" min="30" max="70" value="50" step="1" style="flex-grow: 1;">
-                                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-main);" id="split-label-b">Downstairs Family: 50%</span>
+                                        <div class="split-slider-wrapper">
+                                            <span id="split-label-a">Upstairs Family: 50%</span>
+                                            <input type="range" id="split-slider" min="30" max="70" value="50" step="1">
+                                            <span id="split-label-b">Downstairs Family: 50%</span>
                                         </div>
                                     </div>
 

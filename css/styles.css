@@ -1394,6 +1394,103 @@ p {
     transform: scale(1.05);
 }
 
+/* Split Slider Layout & Timeline Header Styling */
+.split-slider-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.split-slider-wrapper span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    white-space: nowrap;
+}
+
+.split-slider-wrapper input[type="range"] {
+    flex-grow: 1;
+}
+
+.timeline-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.timeline-slider-header span:first-child {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+#timeline-year-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    background-color: var(--color-secondary);
+    padding: 3px 9px;
+    border-radius: 12px;
+    transition: background-color var(--transition-fast);
+}
+
+@media (max-width: 600px) {
+    .split-slider-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .split-slider-wrapper span:first-child {
+        grid-row: 1;
+        grid-column: 1;
+        text-align: left;
+    }
+    
+    .split-slider-wrapper span:last-child {
+        grid-row: 1;
+        grid-column: 2;
+        text-align: right;
+    }
+    
+    .split-slider-wrapper input[type="range"] {
+        grid-row: 2;
+        grid-column: 1 / span 2;
+        width: 100%;
+        margin: 4px 0;
+    }
+
+    /* Hide intermediate timeline ticks on mobile */
+    .timeline-axis-ticks .timeline-tick:not(:nth-child(1)):not(:nth-child(6)):not(:nth-child(11)) {
+        display: none;
+    }
+
+    /* Adjust remaining visible ticks so they align cleanly */
+    .timeline-axis-ticks .timeline-tick {
+        width: auto;
+    }
+
+    .timeline-axis-ticks .timeline-tick:nth-child(1) {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .timeline-axis-ticks .timeline-tick:nth-child(6) {
+        align-items: center;
+        text-align: center;
+    }
+
+    .timeline-axis-ticks .timeline-tick:nth-child(11) {
+        align-items: flex-end;
+        text-align: right;
+    }
+}
+
 /* Dynamic range slider */
 input[type="range"] {
     -webkit-appearance: none;
