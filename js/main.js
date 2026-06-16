@@ -1482,4 +1482,51 @@ document.addEventListener('DOMContentLoaded', () => {
     if (propGrid) {
         filterAndSortProperties();
     }
+
+    // 9. Interactive Reading Mode Toggle (Quick Summary vs. Deep Dive)
+    function initReadingModeToggle() {
+        // Create and append the toggle widget to the DOM
+        const toggleContainer = document.createElement('div');
+        toggleContainer.className = 'reading-mode-toggle-container';
+        toggleContainer.innerHTML = `
+            <div class="reading-mode-toggle">
+                <button class="toggle-btn" id="toggle-quick" title="Short, bulleted key points">⏱️ Quick Summary</button>
+                <button class="toggle-btn" id="toggle-deep" title="Detailed paragraphs and legal context">📄 Deep Dive</button>
+                <div class="toggle-slider"></div>
+            </div>
+        `;
+        document.body.appendChild(toggleContainer);
+
+        const btnQuick = document.getElementById('toggle-quick');
+        const btnDeep = document.getElementById('toggle-deep');
+
+        function setReadingMode(mode) {
+            if (mode === 'deep') {
+                document.body.classList.remove('quick-read-mode');
+                document.body.classList.add('deep-dive-mode');
+                if (btnDeep) btnDeep.classList.add('active');
+                if (btnQuick) btnQuick.classList.remove('active');
+            } else {
+                document.body.classList.remove('deep-dive-mode');
+                document.body.classList.add('quick-read-mode');
+                if (btnQuick) btnQuick.classList.add('active');
+                if (btnDeep) btnDeep.classList.remove('active');
+            }
+            localStorage.setItem('coown_reading_mode', mode);
+        }
+
+        // Initialize state (default to quick summary mode)
+        const savedMode = localStorage.getItem('coown_reading_mode') || 'quick';
+        setReadingMode(savedMode);
+
+        if (btnQuick) {
+            btnQuick.addEventListener('click', () => setReadingMode('quick'));
+        }
+        if (btnDeep) {
+            btnDeep.addEventListener('click', () => setReadingMode('deep'));
+        }
+    }
+
+    initReadingModeToggle();
 });
+

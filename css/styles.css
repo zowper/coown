@@ -3371,6 +3371,128 @@ body.secondary-page .main-content {
     }
 }
 
+/* Reading Mode Toggle Styles */
+.reading-mode-toggle-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    background: rgba(250, 249, 246, 0.85); /* Matches --color-bg with opacity */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 4px;
+    border-radius: 30px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.reading-mode-toggle {
+    position: relative;
+    display: flex;
+    background: var(--color-surface-alt);
+    border-radius: 26px;
+    padding: 2px;
+    width: 280px;
+    height: 38px;
+}
+
+.toggle-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: color 0.3s ease;
+    outline: none;
+}
+
+.toggle-btn.active {
+    color: #FFFFFF;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: calc(50% - 2px);
+    height: calc(100% - 4px);
+    background-color: var(--color-secondary);
+    border-radius: 22px;
+    z-index: 1;
+    transition: transform var(--transition-normal);
+    box-shadow: 0 2px 8px rgba(74, 124, 89, 0.25);
+}
+
+body.deep-dive-mode .toggle-slider {
+    transform: translateX(100%);
+    background-color: var(--color-accent);
+    box-shadow: 0 2px 8px rgba(217, 119, 87, 0.25);
+}
+
+/* Responsive styles for Mobile */
+@media (max-width: 1024px) {
+    .reading-mode-toggle-container {
+        top: auto;
+        right: auto;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 -4px 24px rgba(15, 23, 42, 0.12);
+    }
+}
+
+/* Toggle Content Visibility and Animation */
+.quick-read-content {
+    display: block;
+}
+
+.deep-dive-content {
+    display: none; /* Default state (Quick Read is active) */
+}
+
+/* When Deep Dive Mode is active */
+body.deep-dive-mode .deep-dive-content {
+    display: block;
+    animation: fadeInMode 0.35s ease-in-out;
+}
+
+body.deep-dive-mode .quick-read-content {
+    display: none;
+}
+
+/* When Quick Read Mode is active */
+body.quick-read-mode .quick-read-content {
+    display: block;
+    animation: fadeInMode 0.35s ease-in-out;
+}
+
+body.quick-read-mode .deep-dive-content {
+    display: none;
+}
+
+@keyframes fadeInMode {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 
 
 
