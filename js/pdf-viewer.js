@@ -70,21 +70,10 @@ function getLayoutConfig() {
     const innerWidth = Math.max(280, containerWidth - sliderPadding);
     const gap = 20; // Space between page wrappers
     
-    let columns = 1;
-    if (scale >= 1.0) {
-        columns = 1;
-    } else if (scale >= 0.7) {
-        columns = 2;
-    } else if (scale >= 0.45) {
-        columns = 3;
-    } else {
-        columns = 4;
-    }
-    
-    const pageWidth = (innerWidth - (columns - 1) * gap) / columns;
+    // Page width scales continuously with scale
+    const pageWidth = innerWidth * scale;
     
     return {
-        columns,
         pageWidth,
         gap
     };
@@ -185,7 +174,7 @@ async function updateView() {
     if (!pdfDoc || pageAspectRatios.length === 0) return;
     
     const containerWidth = pagesContainer.clientWidth;
-    const { columns, pageWidth, gap } = getLayoutConfig();
+    const { pageWidth, gap } = getLayoutConfig();
     
     // Clear render cache if scale changed
     if (scale !== currentScale) {
@@ -273,13 +262,13 @@ function onNextPage() {
 
 function zoomOut() {
     if (scale <= 0.3) return;
-    scale = Math.max(0.3, scale - 0.15);
+    scale = Math.max(0.3, scale - 0.10);
     updateView();
 }
 
 function zoomIn() {
     if (scale >= 2.0) return;
-    scale = Math.min(2.0, scale + 0.15);
+    scale = Math.min(2.0, scale + 0.10);
     updateView();
 }
 
