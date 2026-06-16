@@ -440,9 +440,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Helper to determine checkmarks based on LTV feasibility
             const getCheckmarkHtml = (buyoutAmt, l80Val, l90Val) => {
                 if (l80Val >= buyoutAmt) {
-                    return '<span class="buyout-checkmark" title="80% LTV loan is sufficient to buy out this owner">✓✓</span>';
+                    return '<span class="buyout-checkmark" title="80% LTV loan is enough to buy out this owner">✓✓</span>';
                 } else if (l90Val >= buyoutAmt) {
-                    return '<span class="buyout-checkmark" title="90% LTV loan is sufficient to buy out this owner">✓</span>';
+                    return '<span class="buyout-checkmark" title="90% LTV loan is enough to buy out this owner">✓</span>';
                 }
                 return '';
             };
