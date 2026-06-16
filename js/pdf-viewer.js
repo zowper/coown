@@ -5,8 +5,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 
 let pdfDoc = null;
 let pageNum = 1; // Active page number (1-indexed)
-let scale = 1.0; // Current zoom scale
-let currentScale = 1.0;
+const BASE_SCALE = 0.8; // 80% width represents 100% zoom
+let scale = BASE_SCALE; // Current zoom scale
+let currentScale = BASE_SCALE;
 const url = 'assets/pdfs/CO-OWNERSHIP AND PROPERTY OPERATING AGREEMENT.pdf';
 
 // Aspect ratio cache for each page (width / height)
@@ -243,9 +244,10 @@ function updateToolbar() {
     prevBtn.disabled = pageNum <= 1;
     nextBtn.disabled = pageNum >= pdfDoc.numPages;
     
-    zoomVal.textContent = `${Math.round(scale * 100)}%`;
-    zoomOutBtn.disabled = scale <= 0.3; // Allow extra zoom out for multiple pages
-    zoomInBtn.disabled = scale >= 2.0;
+    zoomVal.textContent = `${Math.round((scale / BASE_SCALE) * 100)}%`;
+    // Min scale 0.24 (30% relative zoom), Max scale 1.6 (200% relative zoom)
+    zoomOutBtn.disabled = scale <= 0.24;
+    zoomInBtn.disabled = scale >= 1.6;
 }
 
 function onPrevPage() {
@@ -261,14 +263,16 @@ function onNextPage() {
 }
 
 function zoomOut() {
-    if (scale <= 0.3) return;
-    scale = Math.max(0.3, scale - 0.10);
+    if (scale <= 0.24) return;
+    // Step of 0.08 is exactly 10% relative zoom
+    scale = Math.max(0.24, scale - 0.08);
     updateView();
 }
 
 function zoomIn() {
-    if (scale >= 2.0) return;
-    scale = Math.min(2.0, scale + 0.10);
+    if (scale >= 1.6) return;
+    // Step of 0.08 is exactly 10% relative zoom
+    scale = Math.min(1.6, scale + 0.08);
     updateView();
 }
 
