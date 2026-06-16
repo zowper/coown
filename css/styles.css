@@ -2951,6 +2951,12 @@ input[type="range"]::-moz-range-thumb:hover {
     }
 }
 
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none;
+    }
+}
+
 /* Sub-section Styles for Rearranged Layout */
 .sub-section {
     margin-top: var(--space-xl);
